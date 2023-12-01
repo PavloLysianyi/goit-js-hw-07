@@ -32,8 +32,9 @@ function onGalleryItemClick(event) {
     return;
   }
 
+  const dataSrc = target.dataset.source;
   const galleryItemIndex = galleryItems.findIndex(
-    (item) => item.preview === target.getAttribute("src")
+    (item) => item.original === dataSrc
   );
 
   if (galleryItemIndex !== -1) {
@@ -42,27 +43,25 @@ function onGalleryItemClick(event) {
 }
 
 function openLightbox(index) {
-  const largeImage = getLargeImage(index);
-
-  const lightbox = basicLightbox.create(`<img src="${largeImage}" alt="">`, {
-    onClose: () => {
-      document.removeEventListener("keydown", onKeyPress);
-    },
-  });
+  const lightbox = basicLightbox.create(
+    `<img src="${galleryItems[index].original}" alt="${galleryItems[index].description}">`,
+    {
+      onClose: () => {
+        document.removeEventListener("keydown", onKeyPress);
+      },
+      onShow: () => {
+        document.addEventListener("keydown", onKeyPress);
+      },
+    }
+  );
 
   lightbox.show();
-
-  document.addEventListener("keydown", onKeyPress);
-
-  function onKeyPress(event) {
-    if (event.code === "Escape") {
-      lightbox.close();
-    }
-  }
 }
 
-function getLargeImage(index) {
-  return galleryItems[index].original;
+function onKeyPress(event) {
+  if (event.code === "Escape") {
+    basicLightbox.close();
+  }
 }
 
 console.log(galleryItems);
