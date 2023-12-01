@@ -56,11 +56,11 @@ function openLightbox(index) {
   );
 
   lightbox.show();
-}
 
-function onKeyPress(event) {
-  if (event.code === "Escape") {
-    basicLightbox.close();
+  function onKeyPress(event) {
+    if (event.key === "Escape") {
+      lightbox.close();
+    }
   }
 }
 
